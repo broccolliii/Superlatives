@@ -1,0 +1,189 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Superlative Awards - University of Denver</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8f8f8;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    header {
+      background-color: #990000;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      border-bottom: 5px solid #ffc72c;
+    }
+
+    main {
+      max-width: 800px;
+      margin: 40px auto;
+      background: white;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      margin-top: 0;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-top: 20px;
+      margin-bottom: 8px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 15px;
+    }
+
+    select:disabled {
+      background-color: #f0f0f0;
+      color: #999;
+    }
+
+    button {
+      margin-top: 30px;
+      background-color: #990000;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.2s ease-in-out;
+    }
+
+    button:hover {
+      background-color: #7a0000;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 50px;
+      font-size: 14px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>University of Denver<br>Superlative Awards</h1>
+    <p>Nominate your classmates for their most iconic traits</p>
+  </header>
+
+  <main>
+    <form id="superlativeForm" method="POST" action="https://formspree.io/f/xgvknlww">
+      <label for="userEmail">Enter your email address (or DU ID):</label>
+      <input type="email" id="userEmail" name="userEmail" required placeholder="first.last@du.edu">
+
+      <div id="questions"></div>
+
+      <button type="submit">Submit</button>
+    </form>
+  </main>
+
+  <footer>
+    Made with 💛 by DU students
+  </footer>
+
+  <script>
+    const questions = [
+      "Most Likely to Be CEO",
+      "Future Forbes 40 Under 40",
+      "Most Likely to Launch a Startup",
+      "Most Likely to Pivot Careers – Successfully",
+      "Most Likely to Publish a Best-Selling Business Book",
+      "Most Likely to Be on a TEDx Stage",
+      "Most Likely to Join the Alumni Board",
+      "Most Likely to Teach an MBA Class One Day",
+      "Best “Work Smarter Not Harder” Energy",
+      "Most Likely to Say “Synergy” in a Casual Conversation",
+      "Spreadsheet Whisperer",
+      "Most Likely to Have an Excel Sheet for Vacation Planning",
+      "Best Group Project MVP",
+      "Life of the Party",
+      "Biggest Glow-Up",
+      "Most Likely to Host the Best Post-Grad Parties",
+      "Most Likely to Go Viral on LinkedIn",
+      "Cohort Comedian",
+      "Best “Get Sh*t Done” Partner",
+      "Most Likely to Keep the Group Chat Alive Forever",
+      "Most Likely to Use ChatGPT for Their Wedding Vows",
+      "Most Likely to Make a Career Out of Mentoring Others",
+      "Most Likely to Start a Business and Hire Their Friends",
+      "Most Likely to Be Your First Call for Business Advice",
+      "Most Likely to Ghost Corporate America and Move to the Mountains",
+      "Most Likely to Have a Secret Side Hustle That Blows Up on Shark Tank"
+    ];
+
+    const names = [
+      "Abhinay Sharma", "Alex Wagner", "Andrea Barvi", "Andrew McGraw", "Anthony Nguyen",
+      "Aya Moustafa", "Ben Macaluso", "Brock Pasternak", "Chloe Treaster", "Claire Westergren",
+      "Clay Brown", "Courtney Howell", "David Herrera Becerra", "Emma Bourgraf", "Fahad Alnahedh",
+      "Gabie Bueschel", "Garret Stearns", "James Hermansen", "Lexi Haskins", "Lillie Klemmer",
+      "Luke Tanner", "Peter Soonthornprapuet", "Qiaohui Li", "Roxan Castro", "Sardor Ergashev",
+      "Wilfredo DeGuzman"
+    ];
+
+    const form = document.getElementById('superlativeForm');
+    const questionsDiv = document.getElementById('questions');
+
+    questions.forEach((question, index) => {
+      const label = document.createElement('label');
+      label.textContent = `${index + 1}. ${question}`;
+      const select = document.createElement('select');
+      select.name = `q${index}`;
+      select.dataset.index = index;
+      select.required = true;
+
+      const defaultOption = document.createElement('option');
+      defaultOption.value = "";
+      defaultOption.textContent = "-- Select a name --";
+      select.appendChild(defaultOption);
+
+      names.forEach(name => {
+        const option = document.createElement('option');
+        option.value = name;
+        option.textContent = name;
+        select.appendChild(option);
+      });
+
+      questionsDiv.appendChild(label);
+      questionsDiv.appendChild(select);
+    });
+
+    form.addEventListener('change', () => {
+      const selected = Array.from(form.elements)
+        .filter(el => el.tagName === "SELECT")
+        .map(el => el.value)
+        .filter(v => v !== "");
+
+      Array.from(form.elements)
+        .filter(el => el.tagName === "SELECT")
+        .forEach(select => {
+          const current = select.value;
+          Array.from(select.options).forEach(opt => {
+            if (opt.value === "" || opt.value === current) {
+              opt.disabled = false;
+            } else {
+              opt.disabled = selected.includes(opt.value);
+            }
+          });
+        });
+    });
+  </script>
+</body>
+</html>
